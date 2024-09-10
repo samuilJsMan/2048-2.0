@@ -21,7 +21,6 @@ let blockNumber = 1,
     [0, 0, 0, 0],
     [0, 0, 0, 0],
   ];
-
 if (!localStorage.records) {
   localStorage.setItem(`records`, 0);
 }
@@ -37,12 +36,11 @@ if (!localStorage.blockColor) {
 if (!localStorage.background) {
   localStorage.setItem(`background`, 0);
 }
-
 colorBG[localStorage.background].style.opacity = `1`;
 colorChange[localStorage.background].classList.add(`chosen`);
 chosenOne = JSON.parse(localStorage.blockColor);
 colorBlock.forEach((i) => {
-  if (i.dataset.rgb == chosenOne) i.classList.add(`chosen`);
+  if (i.dataset.rgb == JSON.stringify(chosenOne)) i.classList.add(`chosen`);
 });
 
 createNewBlock();
@@ -113,8 +111,7 @@ function blockChange(x) {
     i.classList.remove(`chosen`);
   }
   colorBlock[x].classList.add(`chosen`);
-  localStorage.block = x;
-  chosenOne = JSON.parse(event.srcElement.dataset.rgb);
+  chosenOne = JSON.parse(event.target.dataset.rgb);
   for (let row of gridMemory) {
     for (let pos of row) {
       if (pos > 0) {
@@ -123,6 +120,7 @@ function blockChange(x) {
       }
     }
   }
+  localStorage.blockColor = event.target.dataset.rgb;
 }
 
 document.querySelector(`.delete_score`).addEventListener(`click`, forDelete);
@@ -272,7 +270,7 @@ function move(swipe) {
         }
         const row = gridMemory[numberOfRow];
         for (let position of row) {
-          if (position != 0&&numberOfRow < 3) {
+          if (position != 0 && numberOfRow < 3) {
             const positionInRow = gridMemory[numberOfRow].indexOf(position);
             const first = document.querySelector(`.block${position}`);
             const second = document.querySelector(
